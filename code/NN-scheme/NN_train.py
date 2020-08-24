@@ -14,7 +14,11 @@ import shelve
 
 from NN_Util import *
 
+#for Vid4 dataset
 modelName = '/home/songzhuoran/video/video-sr-acc/train_info/model_fc3'
+
+#for REDS dataset
+modelName_REDS = '/home/songzhuoran/video/video-sr-acc/train_info/model_reds'
 
 class MyNet(nn.Module):
     def __init__(self):
@@ -22,7 +26,7 @@ class MyNet(nn.Module):
         self.fc1 = nn.Linear(192, 1536)
         self.fc2 = nn.Linear(1536, 3072)
         self.fc3 = nn.Linear(3072, 192)
-        # self.fc4 = nn.Linear(1536, 192)
+        # self.fc4 = nn.Linear(3072, 192)
         # self.fc5 = nn.Linear(840, 192)
 
 
@@ -49,7 +53,7 @@ class ProductDataset(torch.utils.data.Dataset):
         self.data_path = data_path
         self.total = [0,0,0,0]
         self.classname_list = classname_list
-        db = shelve.open(self.data_path+"train.bat")
+        db = shelve.open(self.data_path)
         self.she = {}
         for name in db.keys() :
             self.she[name] = db[name]
@@ -75,7 +79,6 @@ class ProductDataset(torch.utils.data.Dataset):
             classname = self.classname_list[i]
             overall_info = self.she[classname] # load MV and frequency info of each 8*8 block
             if index<self.total[i]:
-                # print(index)
                 if i!=0: # need to substract the previous index num
                     test = overall_info[index-self.total[i-1]] # tmp_row,tmp_tmp_input_residual,tmp_tmp_label_residual
                 else:
@@ -87,22 +90,69 @@ class ProductDataset(torch.utils.data.Dataset):
 
 
 if __name__ == '__main__':
-    classname_list = ['calendar','city','foliage','walk']
-    train_dataset = ProductDataset('/home/songzhuoran/video/video-sr-acc/train_info/',classname_list,train=True)
-    # kwargs = {'num_workers': 4, 'pin_memory': True}
-    # print("=================")
+    # # original training on Vid4 dataset
+    # classname_list = ['calendar','city','foliage','walk']
+    # train_dataset = ProductDataset('/home/songzhuoran/video/video-sr-acc/train_info/train.bat',classname_list,train=True)
+    # train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
+    #                                             batch_size=2048,
+    #                                             shuffle=True)
+
+    # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    # # net = MyNet().to(device)
+    # net=torch.load(modelName).to(device)
+
+
+    # # loss and optimization
+    # criterion = nn.MSELoss().to(device)
+    # optimizer = torch.optim.Adam(net.parameters(), lr=0.0000001)
+
+    # # train
+    # epoch = 0
+    # while (True) :
+    #     epoch += 1
+    #     i = 0
+    #     for data in train_loader:
+    #         i = i+1
+    #         net.zero_grad()
+    #         input_frequency, label_frequency = data
+    #         input_frequency = input_frequency.to(device)
+    #         label_frequency = label_frequency.to(device)
+    #         # print(input_frequency)
+    #         output = net.forward(input_frequency.float())
+    #         train_loss = criterion(output, label_frequency.float())
+
+    #         train_loss.backward()
+    #         optimizer.step()
+    #         if i%10==0:
+    #             MSE = np.mean(np.power(labelPostprocess(output.cpu().data.numpy()) - labelPostprocess(label_frequency.cpu().data.numpy()), 2))
+    #             print("%d,%d loss: = %f, MSE: = %f" % (epoch, i+1, train_loss.data,MSE))
+        
+    #     if epoch%20==0:
+    #         torch.save(net, modelName)
+
+    # finetuning on REDS dataset
+    # classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
+    # train_dataset = ProductDataset('/home/songzhuoran/video/video-sr-acc/train_info/train_REDS.bat',classname_list,train=True)
+    classname_list = ['000'] # need to modify!!!
+    train_dataset = ProductDataset('/home/songzhuoran/video/video-sr-acc/train_info/train_REDS_000.bat',classname_list,train=True) # need to modify!!!
     train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
                                                 batch_size=2048,
                                                 shuffle=True)
 
-
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     # net = MyNet().to(device)
     net=torch.load(modelName).to(device)
+    # net=torch.load(modelName_REDS).to(device)
+
+    # freeze the first and last layers
+    net.fc1.weight.requires_grad = False
+    net.fc1.bias.requires_grad = False
+    # net.fc3.weight.requires_grad = False
+    # net.fc3.bias.requires_grad = False
 
     # loss and optimization
     criterion = nn.MSELoss().to(device)
-    optimizer = torch.optim.Adam(net.parameters(), lr=0.0001)
+    optimizer = torch.optim.Adam(net.parameters(), lr=0.001)
 
     # train
     epoch = 0
@@ -121,12 +171,12 @@ if __name__ == '__main__':
 
             train_loss.backward()
             optimizer.step()
-            if i%20==0:
+            if i%10==0:
                 MSE = np.mean(np.power(labelPostprocess(output.cpu().data.numpy()) - labelPostprocess(label_frequency.cpu().data.numpy()), 2))
                 print("%d,%d loss: = %f, MSE: = %f" % (epoch, i+1, train_loss.data,MSE))
         
-        if epoch%20==0:
-            torch.save(net, modelName)
+        if epoch%10==0:
+            torch.save(net, modelName_REDS)
 
 
 

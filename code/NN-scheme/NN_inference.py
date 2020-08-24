@@ -15,7 +15,11 @@ import cv2
 
 from NN_Util import *
 
+#for Vid4 dataset
 modelName = '/home/songzhuoran/video/video-sr-acc/train_info/model_fc3'
+
+#for REDS dataset
+modelName_REDS = '/home/songzhuoran/video/video-sr-acc/train_info/model_reds'
 
 class MyNet(nn.Module):
     def __init__(self):
@@ -50,7 +54,7 @@ class ProductDataset(torch.utils.data.Dataset):
         self.data_path = data_path
         self.total = [0,0,0,0]
         self.classname_list = classname_list
-        db = shelve.open(self.data_path+"train.bat")
+        db = shelve.open(self.data_path)
         self.she = {}
         for name in db.keys() :
             self.she[name] = db[name]
@@ -96,19 +100,30 @@ def gene_depending_order():
 
 
 if __name__ == '__main__':
-    classname_list = ['calendar','city','foliage','walk']
+    # classname_list = ['calendar','city','foliage','walk']
+    # classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
+    classname_list = ['000'] # need to modify!!!
 
     # init for reconstruction
     bflist = []
     frame_mat_SR = []
     frame_mat_GT_HR = []
     frame_mat_GT_LR = []
-    IDX_DIR="/home/songzhuoran/video/video-sr-acc/Info_BIx4/idx/"
-    PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
-    HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" # GT_HR_pic
-    SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/EDVR/results/Vid4/"
-    RESULT_DIR = "/home/songzhuoran/video/video-sr-acc/bframe_sr/"
-    NN_INFO_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/"
+
+    # IDX_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/idx/"
+    # PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
+    # HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" # GT_HR_pic
+    # SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result"
+    # RESULT_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr/"
+    # NN_INFO_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/train.bat
+
+    IDX_DIR="/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/idx/"
+    PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/BIx4/" # GT_LR_pic
+    HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/GT/" # GT_HR_pic
+    SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/SR_result/"
+    RESULT_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/Our_result/bframe_sr/"
+    NN_INFO_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/train_REDS_000.bat"
+
     for classname in classname_list:
         # print(classname)
         with open(IDX_DIR+"b/"+classname, "r") as file:
@@ -130,6 +145,7 @@ if __name__ == '__main__':
             tmp_frame_mat_GT_HR = np.zeros((frame_num,sr_frame_h,sr_frame_w, 3), dtype="uint8")
             tmp_frame_mat_GT_LR = np.zeros((frame_num,frame_h,frame_w, 3), dtype="uint8")
             for i in range(frame_num):
+                # print(SR_PICS_DIR + classname + "/%08d.png" % i)
                 tmp_frame_mat_SR[i] = cv2.imread(SR_PICS_DIR + classname + "/%08d.png" % i) # read SR result
                 tmp_frame_mat_SR[i]=cv2.cvtColor(tmp_frame_mat_SR[i], cv2.COLOR_BGR2RGB)
                 tmp_frame_mat_GT_HR[i] = cv2.imread(HR_PICS_DIR + classname + "/%08d.png" % i) # read GT_HR result
@@ -154,7 +170,9 @@ if __name__ == '__main__':
 
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    net=torch.load(modelName).to(device)
+    # net=torch.load(modelName).to(device)
+    net=torch.load(modelName_REDS).to(device)
+    
 
     #init
     prev_idx = -1

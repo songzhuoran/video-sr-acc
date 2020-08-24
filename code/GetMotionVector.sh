@@ -1,8 +1,12 @@
-#IMG_DIR=/home/czy/video/BIx4
-#IMG_DIR=/home/czy/video/SRresult
-#IMG_DIR=/home/czy/video/test/
-IMG_DIR=./Vid4/BIx4
-OUT_DIR=./Info_BIx4
+## code for generate MV and index for dataset
+
+# # for Vid4 dataset
+# IMG_DIR=./Vid4/BIx4
+# OUT_DIR=./Info_BIx4
+
+# for Vid4 dataset
+IMG_DIR=/home/songzhuoran/video/video-sr-acc/REDS/BIx4
+OUT_DIR=/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4
 
 video_gen(){
     mkdir -p $OUT_DIR/video
@@ -11,12 +15,12 @@ video_gen(){
     rm -rf $OUT_DIR/video/*
     rm -rf $OUT_DIR/mvs/*
 
-    for class_str in $IMG_DIR/*; do
+    for class_str in $(ls $IMG_DIR); do
         class=${class_str##*/}
         echo ${class}\'s video start producing ...
-        ./tools/FFmpeg/FFmpeg/ffmpeg -i $IMG_DIR/$class/%08d.png -vcodec libx265 -x265-params lossless=1 tmp.mp4
+        ffmpeg -i $IMG_DIR/$class/%08d.png -vcodec libx265 -x265-params lossless=1 tmp.mp4
         #./FFmpeg/ffmpeg -pattern_type glob -i '$IMG_DIR/$class/%08d.jpg' -vcodec libx265 -x265-params lossless=1 tmp.mp4
-        ./tools/FFmpeg/FFmpeg/ffmpeg -i tmp.mp4 -vcodec libx265 -x265-params lossless=1 $OUT_DIR/video/$class.mp4 > $OUT_DIR/mvs/$class.csv
+        ffmpeg -i tmp.mp4 -vcodec libx265 -x265-params lossless=1 $OUT_DIR/video/$class.mp4 > $OUT_DIR/mvs/$class.csv
         rm tmp.mp4
         echo ${class}\'s video done successfully. 
     done

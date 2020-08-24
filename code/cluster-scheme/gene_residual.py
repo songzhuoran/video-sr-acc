@@ -14,16 +14,15 @@ import shelve
 
 #整帧地进行SR
 
-IDX_DIR="/home/songzhuoran/video/video-sr-acc/Info_BIx4/idx/"
-MVS_DIR="/home/songzhuoran/video/video-sr-acc/Info_BIx4/mvs/"
-B_DIR="/home/songzhuoran/video/video-sr-acc/bframe_sr/" # SR result
-B_TEST_DIR="/home/songzhuoran/video/video-sr-acc/bframe_sr_test/"
-RES_DIR="/home/songzhuoran/video/video-sr-acc/Info_BIx4/Residuals/"
-MV_DIR="/home/songzhuoran/video/video-sr-acc/Info_BIx4/mvs/"
-ORDER_DIR="/home/songzhuoran/video/video-sr-acc/Info_BIx4/order/"
+IDX_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/idx/"
+MVS_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
+B_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr/" # SR result
+RES_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/Residuals/"
+MV_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
+ORDER_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/order/"
 PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
 HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" # GT_HR_pic
-SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/EDVR/results/Vid4/"
+SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result"
 TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/"
 
 mvsmat = {} # 记录各帧depending关系的dict
@@ -33,7 +32,6 @@ Res_data = [] # a list to store Residual_data
 MV_data = [] # a list to store MV
 overall_info = [] # a list to store all info, including MV and frequency
 classname_list = ['calendar','city','foliage','walk']
-# classname_list = ['walk']
 classname = 'calendar'
 video_path = PICS_DIR + classname
 pic_names = os.listdir(video_path)
@@ -44,21 +42,11 @@ vis = [False] * frame_num
 img = cv2.imread(PICS_DIR + classname + '/' + pic_names[0], -1)
 img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 frame_h, frame_w, _ = img.shape
-# print(frame_h, frame_w) #(120, 180)
 sr_frame_h = 4 * frame_h
 sr_frame_w = 4 * frame_w
-# frame_mat = np.zeros((frame_num,sr_frame_h,sr_frame_w, 3), dtype="uint8")
-frame_mat_SR = np.zeros((frame_num,sr_frame_h,sr_frame_w, 3), dtype="uint8") #init frame_mat
-frame_mat_GT_HR = np.zeros((frame_num,sr_frame_h,sr_frame_w, 3), dtype="uint8")
+frame_mat_GT_HR = np.zeros((frame_num,sr_frame_h,sr_frame_w, 3), dtype="uint8")#init frame_mat
 frame_mat_GT_LR = np.zeros((frame_num,frame_h,frame_w, 3), dtype="uint8")
 
-def fetch_res_data():
-    #load the whole res_data file into a py list. prevent redundant loading
-    with open(RES_DIR + "Bix4_res_"+classname + ".csv", "r") as file:
-        reader = csv.reader(file)
-        for item in reader:
-            Res_data.append(item)
-    # print('res_len', len(Res_data))
 
 def fetch_MV_data():
     #load the whole res_data file into a py list. prevent redundant loading
@@ -80,8 +68,6 @@ def dep_tree_gen():
             pflist.append(int(row)-1)
     for i in range(frame_num):
         mvsmat[i] = set()  #记录每一帧的还原需要哪些帧的数据
-        frame_mat_SR[i] = cv2.imread(SR_PICS_DIR + classname + "/%08d.png" % i) # read SR result, bgr
-        frame_mat_SR[i]=cv2.cvtColor(frame_mat_SR[i], cv2.COLOR_BGR2RGB)
         frame_mat_GT_HR[i] = cv2.imread(HR_PICS_DIR + classname + "/%08d.png" % i) # read GT_HR result, bgr
         frame_mat_GT_HR[i]=cv2.cvtColor(frame_mat_GT_HR[i], cv2.COLOR_BGR2RGB)
         frame_mat_GT_LR[i] = cv2.imread(PICS_DIR + classname + "/%08d.png" % i) # read GT_LR result, bgr formate
@@ -90,9 +76,6 @@ def dep_tree_gen():
         datainfo = csv.reader(file)
         for row in datainfo:
             mvsmat[int(row[0])].add(int(row[1]))
-    # for i in mvsmat:
-    #     if i in bflist:
-    #         print(i, mvsmat[i])
     return
 
 
@@ -116,23 +99,17 @@ def bframe_gen_kernel(fcnt):
                         sr_refpy = 4 * (refy + py)
                         b_block_gt = b_frame_gt[sr_curpy:sr_curpy+4, sr_curpx:sr_curpx+4]
                         if (refx + px in range(0, frame_w)) and (refy+py in range(0, frame_h)):
-                            ref = ref_frame_sr[sr_refpy:sr_refpy+4, sr_refpx:sr_refpx+4]
-                            for tmp_i in range(4):
-                                for tmp_j in range(4):
-                                    for tmp_c in range(3):
-                                        #generate neural network input and label, use Ground truth and upsample_B
-                                        gt_residual[py*4+tmp_j,px*4+tmp_i,tmp_c] = b_block_gt[tmp_j,tmp_i,tmp_c] - ref[tmp_j,tmp_i,tmp_c]
+                            ref = ref_frame_sr[sr_refpy:sr_refpy+4, sr_refpx:sr_refpx+4, : ]
+                            #generate neural network input and label, use Ground truth of current frame and reference frame
+                            gt_residual[(py*4):(py*4+4),(px*4):(px*4+4),:] = b_block_gt.astype("float") - ref.astype("float")
                         else:
-                            for tmp_i in range(4):
-                                for tmp_j in range(4):
-                                    for tmp_c in range(3):
-                                        gt_residual[py*4+tmp_j,px*4+tmp_i,tmp_c] = b_block_gt[tmp_j,tmp_i,tmp_c]
+                            gt_residual[(py*4):(py*4+4),(px*4):(px*4+4),:] = b_block_gt.astype("float")
             
             tmp_gt_residual = np.zeros((8, 8, 3))
             for px in range(int(4*block_w/8)):
                 for py in range(int(4*block_h/8)):
                     # split the residual into 8*8 blocks
-                    tmp_gt_residual[:,:,:] = np.array(gt_residual[py*8:py*8+8,px*8:px*8+8,:])  
+                    tmp_gt_residual = np.array(gt_residual[py*8:py*8+8,px*8:px*8+8,:])  
                     #generate high-resolution mv
                     tmp_curx = 4*curx + px*8
                     tmp_cury = 4*cury + py*8
@@ -223,9 +200,7 @@ for i in classname_list:
     # print(frame_h, frame_w) #(120, 180)
     sr_frame_h = 4 * frame_h
     sr_frame_w = 4 * frame_w
-    # frame_mat = np.zeros((frame_num,sr_frame_h,sr_frame_w, 3), dtype="uint8")
-    frame_mat_SR = np.zeros((frame_num+1,sr_frame_h,sr_frame_w, 3), dtype="uint8") #init frame_mat
-    frame_mat_GT_HR = np.zeros((frame_num+1,sr_frame_h,sr_frame_w, 3), dtype="uint8")
+    frame_mat_GT_HR = np.zeros((frame_num+1,sr_frame_h,sr_frame_w, 3), dtype="uint8") #init frame_mat
     frame_mat_GT_LR = np.zeros((frame_num+1,frame_h,frame_w, 3), dtype="uint8")
 
     #begin function

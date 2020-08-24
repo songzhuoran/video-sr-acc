@@ -2,9 +2,13 @@
 import shelve
 import numpy as np
 
+# # for Vid4 dataset
+# TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/train.bat"
+# db = shelve.open(TRAIN_DIR)
 
-TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/"
-db = shelve.open(TRAIN_DIR+"train.bat")
+# for REDS dataset
+TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/train_REDS.bat"
+db = shelve.open(TRAIN_DIR)
 she = {}
 for name in db.keys() :
     she[name] = db[name]

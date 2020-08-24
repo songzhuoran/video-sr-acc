@@ -69,7 +69,10 @@ def get_PSNR(classname):
     # path2 = "Vid4/GT_bf/" + classname  #folder of ground truth
     # print(classname)
 
-    path1 = "/home/songzhuoran/video/video-sr-acc/bframe_sr/" + classname  # folder of output
+    # path1 = "/home/songzhuoran/video/video-sr-acc/REDS/Our_result/bframe_sr/" + classname  # folder of output
+    # path1 = "/home/songzhuoran/video/video-sr-acc/REDS/SR_result/" + classname # folder of EDVR results
+    path1 = "/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr_reconstruction/" + classname # folder of EDVR results
+    # path2 = "/home/songzhuoran/video/video-sr-acc/REDS/GT/" + classname  # folder of ground truth
     path2 = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" + classname  # folder of ground truth
 
     ## 直接生成SR图片的base line 结果
@@ -118,6 +121,7 @@ def get_PSNR(classname):
     return
 #
 # classes = ['calendar', 'city', 'foliage', 'walk']
+# classes = ['000']
 classes = ['calendar']
 for classname in classes:
     get_PSNR(classname)
