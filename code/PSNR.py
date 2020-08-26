@@ -70,7 +70,7 @@ def get_PSNR(classname):
     # print(classname)
 
     # path1 = "/home/songzhuoran/video/video-sr-acc/REDS/Our_result/bframe_sr/" + classname  # folder of output
-    # path1 = "/home/songzhuoran/video/video-sr-acc/REDS/SR_result/" + classname # folder of EDVR results
+    # path1 = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result/" + classname # folder of EDVR results
     path1 = "/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr_reconstruction/" + classname # folder of EDVR results
     # path2 = "/home/songzhuoran/video/video-sr-acc/REDS/GT/" + classname  # folder of ground truth
     path2 = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" + classname  # folder of ground truth
@@ -120,9 +120,9 @@ def get_PSNR(classname):
     print('avg: ', avg)
     return
 #
-# classes = ['calendar', 'city', 'foliage', 'walk']
+classes = ['calendar', 'city', 'foliage', 'walk']
 # classes = ['000']
-classes = ['calendar']
+# classes = ['calendar']
 for classname in classes:
     get_PSNR(classname)
 # get_PSNR('calendar')

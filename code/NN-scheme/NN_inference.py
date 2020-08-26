@@ -16,10 +16,10 @@ import cv2
 from NN_Util import *
 
 #for Vid4 dataset
-modelName = '/home/songzhuoran/video/video-sr-acc/train_info/model_fc3'
+modelName = '/home/songzhuoran/video/video-sr-acc/train_info/Vid4_NN/model_fc3'
 
 #for REDS dataset
-modelName_REDS = '/home/songzhuoran/video/video-sr-acc/train_info/model_reds'
+modelName_REDS = '/home/songzhuoran/video/video-sr-acc/train_info/REDS_NN/model_reds'
 
 class MyNet(nn.Module):
     def __init__(self):
@@ -115,14 +115,14 @@ if __name__ == '__main__':
     # HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" # GT_HR_pic
     # SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result"
     # RESULT_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr/"
-    # NN_INFO_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/train.bat
+    # NN_INFO_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vid4_NN/train.bat
 
     IDX_DIR="/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/idx/"
     PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/BIx4/" # GT_LR_pic
     HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/GT/" # GT_HR_pic
     SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/SR_result/"
     RESULT_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/Our_result/bframe_sr/"
-    NN_INFO_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/train_REDS_000.bat"
+    NN_INFO_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/REDS_NN/train_REDS_000.bat"
 
     for classname in classname_list:
         # print(classname)

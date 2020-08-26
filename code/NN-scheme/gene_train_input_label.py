@@ -39,9 +39,9 @@ PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/BIx4/" # GT_LR_pic
 HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/GT/" # GT_HR_pic
 SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/SR_result/"
 # TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/train_REDS.bat"
-TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/train_REDS_000.bat" # need to modify!!
-# classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
-classname_list = ['000'] # need to modify!!
+TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/REDS_NN/train_REDS_"
+classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
+
 
 mvsmat = {} # 记录各帧depending关系的dict
 bflist = []  # aka b frame list
@@ -260,7 +260,7 @@ for i in classname_list:
     frame_mat_GT_LR = np.zeros((frame_num+1,frame_h,frame_w, 3), dtype="uint8")
 
     #begin function
-    she = shelve.open(TRAIN_DIR)
+    she = shelve.open(TRAIN_DIR+classname+".bat")
     fetch_MV_data()
     dep_tree_gen()
     # print("bflist: ",bflist)

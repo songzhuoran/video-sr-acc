@@ -1,4 +1,6 @@
 ## code for training NN, including define NN model and generate dataset
+## code for finetuning NN for REDS dataset
+## TODO: we need to retrain NN model on REDS dataset
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
@@ -15,10 +17,10 @@ import shelve
 from NN_Util import *
 
 #for Vid4 dataset
-modelName = '/home/songzhuoran/video/video-sr-acc/train_info/model_fc3'
+modelName = '/home/songzhuoran/video/video-sr-acc/train_info/Vid4_NN/model_fc3'
 
 #for REDS dataset
-modelName_REDS = '/home/songzhuoran/video/video-sr-acc/train_info/model_reds'
+modelName_REDS = '/home/songzhuoran/video/video-sr-acc/train_info/REDS_NN/model_reds'
 
 class MyNet(nn.Module):
     def __init__(self):
@@ -134,15 +136,15 @@ if __name__ == '__main__':
     # classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
     # train_dataset = ProductDataset('/home/songzhuoran/video/video-sr-acc/train_info/train_REDS.bat',classname_list,train=True)
     classname_list = ['000'] # need to modify!!!
-    train_dataset = ProductDataset('/home/songzhuoran/video/video-sr-acc/train_info/train_REDS_000.bat',classname_list,train=True) # need to modify!!!
+    train_dataset = ProductDataset('/home/songzhuoran/video/video-sr-acc/train_info/REDS_NN/train_REDS_000.bat',classname_list,train=True) # need to modify!!!
     train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
                                                 batch_size=2048,
                                                 shuffle=True)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     # net = MyNet().to(device)
-    net=torch.load(modelName).to(device)
-    # net=torch.load(modelName_REDS).to(device)
+    # net=torch.load(modelName).to(device)
+    net=torch.load(modelName_REDS).to(device)
 
     # freeze the first and last layers
     net.fc1.weight.requires_grad = False
@@ -152,7 +154,7 @@ if __name__ == '__main__':
 
     # loss and optimization
     criterion = nn.MSELoss().to(device)
-    optimizer = torch.optim.Adam(net.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam(net.parameters(), lr=0.0001)
 
     # train
     epoch = 0
