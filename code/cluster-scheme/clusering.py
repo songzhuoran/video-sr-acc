@@ -49,6 +49,7 @@ def Cluster_res_func(ratio,interval):
                 
             if (frame_cnt % interval ==0) and (frame_cnt != 0):
                 res_arr = np.array(res_list)
+
                 ## K-means clustering algorithm
                 ms = KMeans(n_clusters=int(res_arr.shape[0]/ratio))
                 cluster_label = ms.fit_predict(res_arr)
@@ -174,17 +175,17 @@ def Cluster_clustered_res_func(ratio_clustered,ratio,interval):
     return
 
 ### code for clustering delta residual = (residual-clustered residual)
-def cluster_delta_func(ratio_delta,ratio,interval):
+def Cluster_delta_func(ratio_delta,ratio,interval):
     for i in classname_list:
         classname = i
         print("classname: ",classname)
         cluster = shelve.open(TRAIN_DIR+"cluster_label_r"+str(ratio)+"_i"+str(interval)+".bat")
-        overall_cluster_label = cluster[classname]
+        overall_cluster_label = cluster[classname] # clustered label
         cluster.close()
         cluster_res = shelve.open(TRAIN_DIR+"cluster_res_r"+str(ratio)+"_i"+str(interval)+".bat")
-        overall_clusered_res = cluster_res[classname]
+        overall_clusered_res = cluster_res[classname] # central residual
         cluster_res.close()
-        she = shelve.open(TRAIN_DIR+"residual.bat") # for Vid4 dataset
+        she = shelve.open(TRAIN_DIR+"residual.bat") # all residual for 8*8 blocks
         overall_info = she[classname]
         she.close()
 
@@ -195,11 +196,13 @@ def cluster_delta_func(ratio_delta,ratio,interval):
             block_MV = block_info[0].reshape(-1)
             block_res = block_info[1].reshape(-1)
             cur_idx, ref_idx, block_w, block_h, curx, cury, refx, refy = block_MV
-            block_MV_list.append(block_MV)
+            block_MV_list.append(block_MV) #append MV into list
             block_res_list.append(block_res)
 
         begin_cnt = 0 # use to locate MV in block_MV_list and block_res_list
         overall_delta_res_list = [] # use to store delta residual
+
+        # calculate the delta of central residual and residual
         for label_cnt in range(len(overall_cluster_label)):
             delta_res_list = []
             cluster_label = overall_cluster_label[label_cnt]
@@ -214,46 +217,57 @@ def cluster_delta_func(ratio_delta,ratio,interval):
                 single_res = clustered_res[label_data] #shape = (1,192)
                 delta_res = tmp_res - single_res
                 delta_res_list.append(delta_res)
-            overall_delta_res_list.append(delta_res_list) 
+            overall_delta_res_list.append(delta_res_list) # a list storing the delta of central residual and residual
             begin_cnt += len(overall_cluster_label[label_cnt])
 
+        
+        # clustering the delta of central residual and residual, then calculate the central delta residual
+        overall_clustered_delta_label_list = []
         overall_clustered_delta_res_list = []
         for label_cnt in range(len(overall_delta_res_list)):
-            delta_res_arr = np.array(overall_delta_res_list[label_cnt])
-            ms = KMeans(n_clusters=ratio_delta)
+            delta_res_arr = np.array(overall_delta_res_list[label_cnt])[:,0,:]
+            print(delta_res_arr.shape)
+            ms = KMeans(n_clusters=int(delta_res_arr.shape[0]/ratio_delta))
             delta_cluster_label = ms.fit_predict(delta_res_arr)
 
             clustered_delta_res_list = []
-            for label_num in range(ratio_delta): # 0~405 label number
+            for label_num in range(int(delta_res_arr.shape[0]/ratio_delta)): # 0~405 label number
                 delta_clustered_res = np.zeros((1,192))
                 clustered_cnt = 0
-                for cluster_l in delta_cluster_label:
-                    if cluster_l == label_num:
-                        clustered_cnt +=1
-                        delta_clustered_res += delta_res_arr[cluster_l]
-                clustered_delta_res_list.append((delta_clustered_res.astype("float")/float(clustered_cnt)).astype("float"))
-                clustered_cnt = 0
 
+                for label_idx, label_data in enumerate(delta_cluster_label):
+                    if label_data == label_num:
+                        clustered_cnt +=1
+                        delta_clustered_res += delta_res_arr[label_idx]
+                    # print("clustered_res: ", clustered_res)
+                clustered_delta_res_list.append((delta_clustered_res.astype("float")/float(clustered_cnt)).astype("float"))
+                clustered_cnt = 0                
+
+            overall_clustered_delta_label_list.append(delta_cluster_label)
             overall_clustered_delta_res_list.append(clustered_delta_res_list)
+            
 
         cluster = shelve.open(TRAIN_DIR+"cluster_delta_label_r"+str(ratio_delta)+"_i"+str(interval)+".bat")
-        cluster[classname] = overall_delta_res_list
+        cluster[classname] = overall_clustered_delta_label_list
         cluster.close()
 
         cluster_res = shelve.open(TRAIN_DIR+"cluster_delta_res_r"+str(ratio_delta)+"_i"+str(interval)+".bat")
         cluster_res[classname] = overall_clustered_delta_res_list
         cluster_res.close()
+        print("success!")
     return
 
 # if __name__ == '__main__':
 ratio = int(sys.argv[1])
 interval = int(sys.argv[2])
 # Cluster_res_func(ratio,interval)
-compression_ratio = 4 # compress weights 16x
-ratio_clustered = int(compression_ratio/ratio)
+compression_ratio = 16 # compress weights 16x
+
+# ratio_clustered = int(compression_ratio/ratio)
 # Cluster_clustered_res_func(ratio_clustered,ratio,interval)
 
 ratio_delta = int(compression_ratio*ratio/(ratio-compression_ratio))
-cluster_delta_func(ratio_delta,ratio,interval)
+# ratio_delta = 2 # need to modify
+Cluster_delta_func(ratio_delta,ratio,interval)
 
 

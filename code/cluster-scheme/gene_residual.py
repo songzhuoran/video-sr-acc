@@ -22,7 +22,7 @@ MV_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
 ORDER_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/order/"
 PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
 HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" # GT_HR_pic
-SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result"
+SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result/"
 TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/"
 
 mvsmat = {} # 记录各帧depending关系的dict
@@ -46,6 +46,7 @@ sr_frame_h = 4 * frame_h
 sr_frame_w = 4 * frame_w
 frame_mat_GT_HR = np.zeros((frame_num,sr_frame_h,sr_frame_w, 3), dtype="uint8")#init frame_mat
 frame_mat_GT_LR = np.zeros((frame_num,frame_h,frame_w, 3), dtype="uint8")
+frame_mat_SR_HR = np.zeros((frame_num,sr_frame_h,sr_frame_w, 3), dtype="uint8")
 
 
 def fetch_MV_data():
@@ -72,6 +73,8 @@ def dep_tree_gen():
         frame_mat_GT_HR[i]=cv2.cvtColor(frame_mat_GT_HR[i], cv2.COLOR_BGR2RGB)
         frame_mat_GT_LR[i] = cv2.imread(PICS_DIR + classname + "/%08d.png" % i) # read GT_LR result, bgr formate
         frame_mat_GT_LR[i]=cv2.cvtColor(frame_mat_GT_LR[i], cv2.COLOR_BGR2RGB) # convert to rgb
+        frame_mat_SR_HR[i] = cv2.imread(SR_PICS_DIR + classname + "/%08d.png" % i) # read GT_LR result, bgr formate
+        frame_mat_SR_HR[i]=cv2.cvtColor(frame_mat_SR_HR[i], cv2.COLOR_BGR2RGB) # convert to rgb
     with open(MVS_DIR+classname+".csv","r") as file:
         datainfo = csv.reader(file)
         for row in datainfo:
@@ -87,7 +90,7 @@ def bframe_gen_kernel(fcnt):
             cur_idx, ref_idx, block_w, block_h, curx, cury, refx, refy = np.array(row[0:8]).astype(float).astype(int)
             #generate residual of ground-truth frames
             gt_residual = np.zeros((4*block_h, 4*block_w, 3))
-            ref_frame_sr = frame_mat_GT_HR[ref_idx]
+            ref_frame_sr = frame_mat_SR_HR[ref_idx]
             b_frame_gt = frame_mat_GT_HR[cur_idx]
             for px in range(block_w):
                 for py in range(block_h):
@@ -202,6 +205,7 @@ for i in classname_list:
     sr_frame_w = 4 * frame_w
     frame_mat_GT_HR = np.zeros((frame_num+1,sr_frame_h,sr_frame_w, 3), dtype="uint8") #init frame_mat
     frame_mat_GT_LR = np.zeros((frame_num+1,frame_h,frame_w, 3), dtype="uint8")
+    frame_mat_SR_HR = np.zeros((frame_num+1,sr_frame_h,sr_frame_w, 3), dtype="uint8")
 
     #begin function
     she = shelve.open(TRAIN_DIR+"residual.bat")
