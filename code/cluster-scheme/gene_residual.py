@@ -14,16 +14,33 @@ import shelve
 
 #整帧地进行SR
 
-IDX_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/idx/"
-MVS_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
-B_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr/" # SR result
-RES_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/Residuals/"
-MV_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
-ORDER_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/order/"
-PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
-HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" # GT_HR_pic
-SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result/"
-TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/"
+# #for Vid4 dataset
+# IDX_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/idx/"
+# MVS_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
+# B_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr/" # SR result
+# RES_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/Residuals/"
+# MV_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
+# ORDER_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/order/"
+# PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
+# HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" # GT_HR_pic
+# SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result/"
+# TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vid4_Cluster/"
+# classname_list = ['calendar','city','foliage','walk']
+# classname = 'calendar'
+
+#for Vid4 dataset
+IDX_DIR="/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/idx/"
+MVS_DIR="/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/mvs/"
+B_DIR="/home/songzhuoran/video/video-sr-acc/REDS/Our_result/bframe_sr/" # SR result
+RES_DIR="/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/Residuals/"
+MV_DIR="/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/mvs/"
+ORDER_DIR="/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/order/"
+PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/BIx4/" # GT_LR_pic
+HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/GT/" # GT_HR_pic
+SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/SR_result/"
+TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/REDS_Cluster/"
+classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
+classname = '000'
 
 mvsmat = {} # 记录各帧depending关系的dict
 bflist = []  # aka b frame list
@@ -31,13 +48,10 @@ pflist = []  # aka b frame list
 Res_data = [] # a list to store Residual_data
 MV_data = [] # a list to store MV
 overall_info = [] # a list to store all info, including MV and frequency
-classname_list = ['calendar','city','foliage','walk']
-classname = 'calendar'
 video_path = PICS_DIR + classname
 pic_names = os.listdir(video_path)
 frame_num = len(pic_names)
 vis = [False] * frame_num
-
 #get shape and length of the whole video
 img = cv2.imread(PICS_DIR + classname + '/' + pic_names[0], -1)
 img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -208,7 +222,7 @@ for i in classname_list:
     frame_mat_SR_HR = np.zeros((frame_num+1,sr_frame_h,sr_frame_w, 3), dtype="uint8")
 
     #begin function
-    she = shelve.open(TRAIN_DIR+"residual.bat")
+    she = shelve.open(TRAIN_DIR+"residual_"+classname+".bat")
     fetch_MV_data()
     dep_tree_gen()
 

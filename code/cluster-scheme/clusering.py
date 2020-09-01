@@ -16,7 +16,8 @@ TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vid4_Cluster/"
 
 
 overall_info = [] # a list to store all info, including MV and frequency
-classname_list = ['calendar','city','foliage','walk']
+# classname_list = ['calendar','city','foliage','walk']
+classname_list = ['walk'] # need to modify!!!!
 MV_list = []
 res_list = []
 # iterate all videos
@@ -50,24 +51,17 @@ def Cluster_res_func(ratio,interval):
             if (frame_cnt % interval ==0) and (frame_cnt != 0):
                 res_arr = np.array(res_list)
 
+                # ## MeanShift clustering algorithm
+                # ms = MeanShift(bin_seeding=True,n_jobs=32)
+                # cluster_label = ms.fit_predict(res_arr)
+
                 ## K-means clustering algorithm
                 ms = KMeans(n_clusters=int(res_arr.shape[0]/ratio))
                 cluster_label = ms.fit_predict(res_arr)
+
                 ## calculate the clustered residual
                 clustered_res_list = []
-                for label_num in range(int(res_arr.shape[0]/ratio)): # 0~1600
-                    clustered_res = np.zeros((1,192))
-                    clustered_cnt = 0
-                    for label_idx, label_data in enumerate(cluster_label):
-                        if label_data == label_num:
-                            clustered_cnt +=1
-                            clustered_res += res_arr[label_idx]
-                    # print("clustered_res: ", clustered_res)
-                    clustered_res_list.append((clustered_res.astype("float")/float(clustered_cnt)).astype("float"))
-                    # print("res: ")
-                    # print((clustered_res.astype("float")/float(clustered_cnt)).astype("float"))
-                    clustered_cnt = 0
-                    
+                clustered_res_list = list(ms.cluster_centers_.astype("float"))
 
                 overall_cluster_label.append(cluster_label)
                 overall_clusered_res.append(clustered_res_list)
@@ -82,27 +76,17 @@ def Cluster_res_func(ratio,interval):
         if len(res_list) != 0:
             res_arr = np.array(res_list)
 
-            ## MeanShift clustering algorithm
-            # ms = MeanShift(bin_seeding=True)
+            # ## MeanShift clustering algorithm
+            # ms = MeanShift(bin_seeding=True,n_jobs=32)
             # cluster_label = ms.fit_predict(res_arr)
 
             ## K-means clustering algorithm
             ms = KMeans(n_clusters=int(res_arr.shape[0]/ratio))
             cluster_label = ms.fit_predict(res_arr)
+            
             ## calculate the clustered residual
             clustered_res_list = []
-            for label_num in range(int(res_arr.shape[0]/ratio)): # 0~405
-                clustered_res = np.zeros((1,192))
-                clustered_cnt = 0
-                for cluster_l in cluster_label:
-                    if cluster_l == label_num:
-                        clustered_cnt +=1
-                        clustered_res += res_arr[cluster_l]
-                # print("clustered_res: ", clustered_res)
-                clustered_res_list.append((clustered_res.astype("float")/float(clustered_cnt)).astype("float"))
-                print("res: ")
-                print((clustered_res.astype("float")/float(clustered_cnt)).astype("float"))
-                clustered_cnt = 0
+            clustered_res_list = list(ms.cluster_centers_.astype("float"))
 
             overall_cluster_label.append(cluster_label)
             overall_clusered_res.append(clustered_res_list)
@@ -111,7 +95,16 @@ def Cluster_res_func(ratio,interval):
             frame_cnt = 0
             print("final succeed!")
 
+        # ## MeanShift clustering algorithm
+        # cluster = shelve.open(TRAIN_DIR+"Mean_shift_label_i"+str(interval)+".bat")
+        # cluster[classname] = overall_cluster_label
+        # cluster.close()
 
+        # cluster_res = shelve.open(TRAIN_DIR+"Mean_shift_res_i"+str(interval)+".bat")
+        # cluster_res[classname] = overall_clusered_res
+        # cluster_res.close()
+
+        ## K-means algorithm
         cluster = shelve.open(TRAIN_DIR+"cluster_label_r"+str(ratio)+"_i"+str(interval)+".bat")
         cluster[classname] = overall_cluster_label
         cluster.close()
@@ -150,17 +143,21 @@ def Cluster_clustered_res_func(ratio_clustered,ratio,interval):
             ms = KMeans(n_clusters=int(res_arr.shape[0]/ratio_clustered))
             cluster_clustered_label = ms.fit_predict(res_arr)
             ## calculate the clustered residual
-            cluster_clustered_res_list = []
-            for label_num in range(int(res_arr.shape[0]/ratio_clustered)): # 0~1600
-                cluster_clustered_res = np.zeros((1,192))
-                clustered_cnt = 0
-                for label_idx, label_data in enumerate(cluster_clustered_label):
-                    if label_data == label_num:
-                        clustered_cnt +=1
-                        cluster_clustered_res += res_arr[label_idx]
-                # print("clustered_res: ", clustered_res)
-                cluster_clustered_res_list.append((cluster_clustered_res.astype("float")/float(clustered_cnt)).astype("float"))
-                clustered_cnt = 0
+
+            # cluster_clustered_res_list = []
+            # for label_num in range(int(res_arr.shape[0]/ratio_clustered)): # 0~1600
+            #     cluster_clustered_res = np.zeros((1,192))
+            #     clustered_cnt = 0
+            #     for label_idx, label_data in enumerate(cluster_clustered_label):
+            #         if label_data == label_num:
+            #             clustered_cnt +=1
+            #             cluster_clustered_res += res_arr[label_idx]
+            #     # print("clustered_res: ", clustered_res)
+            #     cluster_clustered_res_list.append((cluster_clustered_res.astype("float")/float(clustered_cnt)).astype("float"))
+            #     clustered_cnt = 0
+            clustered_res_list = []
+            clustered_res_list = list(ms.cluster_centers_.astype("float"))
+
             overall_cluster_clustered_label.append(cluster_clustered_label)
             overall_cluster_clusered_res.append(cluster_clustered_res_list)
         
@@ -225,27 +222,31 @@ def Cluster_delta_func(ratio_delta,ratio,interval):
         overall_clustered_delta_label_list = []
         overall_clustered_delta_res_list = []
         for label_cnt in range(len(overall_delta_res_list)):
-            delta_res_arr = np.array(overall_delta_res_list[label_cnt])[:,0,:]
+            delta_res_arr = np.array(overall_delta_res_list[label_cnt])
             print(delta_res_arr.shape)
-            ms = KMeans(n_clusters=int(delta_res_arr.shape[0]/ratio_delta))
-            delta_cluster_label = ms.fit_predict(delta_res_arr)
+            if ratio_delta !=0:
+                ms = KMeans(n_clusters=int(delta_res_arr.shape[0]/ratio_delta))
+                delta_cluster_label = ms.fit_predict(delta_res_arr)
 
-            clustered_delta_res_list = []
-            for label_num in range(int(delta_res_arr.shape[0]/ratio_delta)): # 0~405 label number
-                delta_clustered_res = np.zeros((1,192))
-                clustered_cnt = 0
+                clustered_delta_res_list = []
+                clustered_delta_res_list = list(ms.cluster_centers_.astype("float"))                     
 
-                for label_idx, label_data in enumerate(delta_cluster_label):
-                    if label_data == label_num:
-                        clustered_cnt +=1
-                        delta_clustered_res += delta_res_arr[label_idx]
-                    # print("clustered_res: ", clustered_res)
-                clustered_delta_res_list.append((delta_clustered_res.astype("float")/float(clustered_cnt)).astype("float"))
-                clustered_cnt = 0                
-
-            overall_clustered_delta_label_list.append(delta_cluster_label)
-            overall_clustered_delta_res_list.append(clustered_delta_res_list)
+                overall_clustered_delta_label_list.append(delta_cluster_label)
+                overall_clustered_delta_res_list.append(clustered_delta_res_list)
             
+            else: # used for test whether the code flow is correct
+                delta_cluster_label = np.zeros((delta_res_arr.shape[0]))
+                for dd_cc_idx in range(int(delta_cluster_label.shape[0])):
+                    delta_cluster_label[dd_cc_idx] = int(dd_cc_idx)
+                clustered_delta_res_list = []
+                for label_num in range(int(delta_cluster_label.shape[0])): # 0~405 label number
+                    delta_clustered_res = np.zeros((1,192))
+                    delta_clustered_res = delta_res_arr[label_num]
+                    clustered_delta_res_list.append(delta_clustered_res.astype("float"))
+                    clustered_cnt = 0                
+
+                overall_clustered_delta_label_list.append(delta_cluster_label)
+                overall_clustered_delta_res_list.append(clustered_delta_res_list)
 
         cluster = shelve.open(TRAIN_DIR+"cluster_delta_label_r"+str(ratio_delta)+"_i"+str(interval)+".bat")
         cluster[classname] = overall_clustered_delta_label_list
@@ -260,14 +261,13 @@ def Cluster_delta_func(ratio_delta,ratio,interval):
 # if __name__ == '__main__':
 ratio = int(sys.argv[1])
 interval = int(sys.argv[2])
-# Cluster_res_func(ratio,interval)
-compression_ratio = 16 # compress weights 16x
+Cluster_res_func(ratio,interval)
+# compression_ratio = 16 # compress weights 16x
 
-# ratio_clustered = int(compression_ratio/ratio)
-# Cluster_clustered_res_func(ratio_clustered,ratio,interval)
+# # ratio_clustered = int(compression_ratio/ratio)
+# # Cluster_clustered_res_func(ratio_clustered,ratio,interval)
 
-ratio_delta = int(compression_ratio*ratio/(ratio-compression_ratio))
-# ratio_delta = 2 # need to modify
-Cluster_delta_func(ratio_delta,ratio,interval)
+# ratio_delta = int(compression_ratio*ratio/(ratio-compression_ratio))
+# Cluster_delta_func(ratio_delta,ratio,interval)
 
 
