@@ -19,23 +19,22 @@ PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
 
 
 overall_info = [] # a list to store all info, including MV and frequency
-# classname_list = ['calendar','city','foliage','walk']
-classname_list = ['walk'] # need to modify!!
+classname_list = ['calendar','city','foliage','walk']
+# classname_list = ['walk'] # need to modify!!
 MV_list = []
 res_list = []
 # iterate all videos
 
 # reconstruct B frames using the central residuals
-def reconstruct_cluster_func(ratio,interval):
+def reconstruct_cluster_func(ratio):
     for i in classname_list:
         classname = i
         print("classname: ",classname)
-        # print(TRAIN_DIR+"cluster_label_r"+str(ratio)+"_i"+str(interval)+".bat")
-        cluster = shelve.open(TRAIN_DIR+"cluster_label_r"+str(ratio)+"_i"+str(interval)+".bat")
+        cluster = shelve.open(TRAIN_DIR+"cluster_label_r"+str(ratio)+".bat") ## need to modify!!!!
         
         overall_cluster_label = cluster[classname]
         cluster.close()
-        cluster_res = shelve.open(TRAIN_DIR+"cluster_res_r"+str(ratio)+"_i"+str(interval)+".bat")
+        cluster_res = shelve.open(TRAIN_DIR+"cluster_res_r"+str(ratio)+".bat")
         overall_clusered_res = cluster_res[classname]
         cluster_res.close()
         she = shelve.open(TRAIN_DIR+"residual.bat") # for Vid4 dataset
@@ -121,26 +120,25 @@ def reconstruct_cluster_func(ratio,interval):
             begin_cnt += len(overall_cluster_label[label_cnt])
 
 # reconstruct B frames using the central residuals and the clustered delta residual
-def reconstruct_delta_cluster_func(ratio_delta,ratio,interval):
+def reconstruct_delta_cluster_func(ratio_delta,ratio):
     for i in classname_list:
         classname = i
         print("classname: ",classname)
 
-        cluster = shelve.open(TRAIN_DIR+"cluster_label_r"+str(ratio)+"_i"+str(interval)+".bat")
+        cluster = shelve.open(TRAIN_DIR+"cluster_label_r"+str(ratio)+".bat")
         overall_cluster_label = cluster[classname]
         cluster.close()
-        cluster_res = shelve.open(TRAIN_DIR+"cluster_res_r"+str(ratio)+"_i"+str(interval)+".bat")
+        cluster_res = shelve.open(TRAIN_DIR+"cluster_res_r"+str(ratio)+".bat")
         overall_clusered_res = cluster_res[classname]
         cluster_res.close()
         she = shelve.open(TRAIN_DIR+"residual.bat")
         overall_info = she[classname]
         she.close()
 
-        # print(TRAIN_DIR+"cluster_delta_label_r"+str(ratio_delta)+"_i"+str(interval)+".bat")
-        cluster = shelve.open(TRAIN_DIR+"cluster_delta_label_r"+str(ratio_delta)+"_i"+str(interval)+".bat")
+        cluster = shelve.open(TRAIN_DIR+"cluster_delta_label_r"+str(ratio)+".bat")
         overall_clustered_delta_label_list = cluster[classname]
         cluster.close()
-        cluster_res = shelve.open(TRAIN_DIR+"cluster_delta_res_r"+str(ratio_delta)+"_i"+str(interval)+".bat")
+        cluster_res = shelve.open(TRAIN_DIR+"cluster_delta_res_r"+str(ratio)+".bat")
         overall_clustered_delta_res_list = cluster_res[classname]
         cluster_res.close()
         
@@ -232,7 +230,7 @@ def reconstruct_delta_cluster_func(ratio_delta,ratio,interval):
                 for px in range(block_w):
                     for py in range(block_h):
                         if ((curx+px) < sr_frame_w) and ((cury+py) < sr_frame_h):
-                            if ((refx + px) < sr_frame_w) and ((refy+py) < sr_frame_h):
+                            if (0 <= (refx + px) < sr_frame_w) and (0 <= (refy+py) < sr_frame_h):
                                 B_img[cury+py,curx+px,:] = ref_frame_sr[refy+py,refx + px,:].astype("float") + tmp_res[py,px,:].astype("float")
                             else:
                                 B_img[cury+py,curx+px,:] = tmp_res[py,px,:].astype("float")
@@ -242,11 +240,10 @@ def reconstruct_delta_cluster_func(ratio_delta,ratio,interval):
 
 
 ratio = int(sys.argv[1])
-interval = int(sys.argv[2])
-# reconstruct_cluster_func(ratio,interval)
+# reconstruct_cluster_func(ratio)
 compression_ratio = 16 # compress weights 16x
 ratio_delta = int(compression_ratio*ratio/(ratio-compression_ratio))
-reconstruct_delta_cluster_func(ratio_delta,ratio,interval)
+reconstruct_delta_cluster_func(ratio_delta,ratio)
 
 
     

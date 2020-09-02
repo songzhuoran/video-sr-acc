@@ -3,6 +3,7 @@ import sys
 from PIL import Image
 import numpy as np
 import copy
+import cv2
 
 # ITU-R BT.601
 # https://en.wikipedia.org/wiki/YCbCr
@@ -38,36 +39,17 @@ def ycbcr2rgb(ycbcr):
 def PSNRSingleChannel(x, y, max = 255) :
     assert (x.shape == y.shape), "Size mismatch."
     epi = 0.0001
+
     #print("np.product(x.shape)",np.product(x.shape))
     mse = np.sum(np.power((x - y), 2)) / (np.product(x.shape)) + epi
-    #print("mse",mse)
+    # print("mse",mse)
     return 10 * np.log(max * max / mse) / np.log(10)
 
 def usageHalt() :
     print("Usage: PSNR.py folderOfGT folderOfOutput")
     exit()
-#
-# arg = sys.argv
-#
-# if (len(arg) != 3) :
-#     usageHalt()
-
-
-# if (not os.path.isdir(path1)) :
-#     print(arg[1], "(extended as", path1, ")", 'is not a valid folder.')
-#     usageHalt()
-#
-# if (not os.path.isdir(path2)) :
-#     print(arg[2], "(extended as", path2, ")", 'is not a valid folder.')
-#     usageHalt()
 
 def get_PSNR(classname):
-    # path1 = "Vid4/BIx4_bf/" + classname  # folder of ground truth
-    # path2 = "bframe/" + classname  # folder of output
-
-    # path1 = "bframe_sr/" + classname     #folder of output
-    # path2 = "Vid4/GT_bf/" + classname  #folder of ground truth
-    # print(classname)
 
     # path1 = "/home/songzhuoran/video/video-sr-acc/REDS/Our_result/bframe_sr/" + classname  # folder of output
     # path1 = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result/" + classname # folder of EDVR results
@@ -75,18 +57,13 @@ def get_PSNR(classname):
     # path2 = "/home/songzhuoran/video/video-sr-acc/REDS/GT/" + classname  # folder of ground truth
     path2 = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" + classname  # folder of ground truth
 
-    ## 直接生成SR图片的base line 结果
-    # path1 = "EDVR/results/Vid4/" + classname     #folder of output
-    # path2 = "Vid4/GT/" + classname  #folder of ground truth
 
     # path2 = path1
     list1 = list(filter(os.path.isfile,map(lambda x: os.path.join(path1, x), os.listdir(path1))))
-    # print(list1)
     list2 = list(filter(os.path.isfile,map(lambda x: os.path.join(path2, x), os.listdir(path2))))
 
     list1.sort()
     list2.sort()
-    # print(list1)
 
     if (len(list1) != len(list2)) :
         print('Numbers of files contained in two folder is different.', (len(list1), len(list2)))
@@ -102,27 +79,43 @@ def get_PSNR(classname):
 
     for p1,p2 in zip(list1, list2) :
         # print('hi')
+        
         img1 = Image.open(p1)
         # arr1 = rgb2ycbcr(np.array(img1, dtype = "double"))
         arr1 = (np.array(img1, dtype = "double"))
         img2 = Image.open(p2).resize(img1.size, Image.BICUBIC)
         # arr2 = rgb2ycbcr(np.array(img2, dtype = "double"))
         arr2 = (np.array(img2, dtype = "double"))
+
+        # # draw the PSNR hit map
+        # DRAW_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/draw/"
+        # tmp_p1 = p1.replace("/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr_reconstruction/",DRAW_DIR)
+        # draw_img = arr1
+        # for i in range(arr1.shape[0]):
+        #     for j in range(arr2.shape[1]):
+        #         a = abs(arr1[i,j,:]-arr2[i,j,:])
+        #         b = np.sum(a)
+        #         Rmin = 0
+        #         Rmax = 255
+        #         Cmin = np.array([0, 0, 255])
+        #         Cmax = np.array([255, 0, 0])
+        #         draw_img[i,j,:] = (b - Rmin) / (Rmax - Rmin) * (Cmax - Cmin) + Cmin
+        # Image.fromarray(draw_img.astype('uint8')).save(tmp_p1)
+        # print(tmp_p1)
+
+        # calculate PSNR
         listAns += [np.sum(list(map(lambda pair: PSNRSingleChannel(pair[0], pair[1]), zip(arrayYielder(arr1),arrayYielder(arr2))))) / 3]
-        # print("p1: ",p1)
-        # print("p2: ",p2)
 
     avg = np.average(listAns)
 
-    #print("Avg PSNR =", avg, "for", len(list1), "images in", arg[1], "and", arg[2], "( Std =", np.std(listAns), ")")
     print('classname: ', classname)
     print(listAns)
     print('avg: ', avg)
     return
 #
 classes = ['calendar', 'city', 'foliage', 'walk']
-# classes = ['000']
-# classes = ['calendar']
+# classes = ['000'] # need to modify
+# classes = ['walk'] # need to modify
 for classname in classes:
     get_PSNR(classname)
 # get_PSNR('calendar')
