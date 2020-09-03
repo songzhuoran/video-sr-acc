@@ -4,9 +4,13 @@
 # IMG_DIR=./Vid4/BIx4
 # OUT_DIR=./Info_BIx4
 
-# for Vid4 dataset
+# for REDS dataset
 IMG_DIR=/home/songzhuoran/video/video-sr-acc/REDS/BIx4
 OUT_DIR=/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4
+
+# # for Vimeo90k dataset
+# IMG_DIR=/home/songzhuoran/video/video-sr-acc/Vimeo90K/BIx4
+# OUT_DIR=/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4
 
 video_gen(){
     mkdir -p $OUT_DIR/video

@@ -19,8 +19,9 @@ PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/BIx4/" # GT_LR_pic
 residual_info = [] # a list to store all info, including MV and frequency
 # classname_list = ['calendar','city','foliage','walk']
 # classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
-classname_list = ['002','003'] # need to modify!
-classname = '002'
+classname_list = ['004','005','006','007'] # need to modify!
+# classname_list = ['000'] # need to modify!
+classname = '004'
 MV_list = []
 res_list = []
 
@@ -460,11 +461,11 @@ def Cluster_delta_func(ratio_delta,ratio):
 
 #begin func
 ratio = int(sys.argv[1])
+compression_ratio = 16 # compress weights 16x
+ratio_delta = int(compression_ratio*ratio/(ratio-compression_ratio))
 ### first floor clustering
 Cluster_res_func(ratio)
 ### second floor clustering
-compression_ratio = 16 # compress weights 16x
-ratio_delta = int(compression_ratio*ratio/(ratio-compression_ratio))
 Cluster_delta_func(ratio_delta,ratio)
 
 
