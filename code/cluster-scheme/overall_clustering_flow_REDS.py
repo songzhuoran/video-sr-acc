@@ -19,9 +19,9 @@ PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/BIx4/" # GT_LR_pic
 residual_info = [] # a list to store all info, including MV and frequency
 # classname_list = ['calendar','city','foliage','walk']
 # classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
-classname_list = ['004','005','006','007'] # need to modify!
+classname_list = ['015','016'] # need to modify!
 # classname_list = ['000'] # need to modify!
-classname = '004'
+classname = '015'
 MV_list = []
 res_list = []
 
@@ -425,7 +425,11 @@ def Cluster_delta_func(ratio_delta,ratio):
             print(delta_res_arr.shape)
             if ratio_delta !=0:
                 # ms = KMeans(n_clusters=int(delta_res_arr.shape[0]/ratio_delta),verbose=1,algorithm='full',n_init = 2)
-                ms = KMeans(n_clusters=int(delta_res_arr.shape[0]/ratio_delta),verbose = 1,n_init = 2)
+                if int(delta_res_arr.shape[0]/ratio_delta) == 0:
+                    tmp_ratio = 1
+                else:
+                    tmp_ratio = int(delta_res_arr.shape[0]/ratio_delta)
+                ms = KMeans(n_clusters=tmp_ratio,verbose = 1,n_init = 2)
                 delta_cluster_label = ms.fit_predict(delta_res_arr)
 
                 clustered_delta_res_list = []
