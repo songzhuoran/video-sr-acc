@@ -19,9 +19,9 @@ PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/BIx4/" # GT_LR_pic
 residual_info = [] # a list to store all info, including MV and frequency
 # classname_list = ['calendar','city','foliage','walk']
 # classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
-classname_list = ['015','016'] # need to modify!
+classname_list = ['000','001','002','003','004'] # need to modify!
 # classname_list = ['000'] # need to modify!
-classname = '015'
+classname = '000'
 MV_list = []
 res_list = []
 
@@ -95,6 +95,7 @@ def Reconstruct_cluster_func(ratio):
                                 if B_img[j,i,c]>255:
                                     B_img[j,i,c] = 255
                     B_img = B_img.astype("uint8")
+                    frame_mat_SR[tmp_cur_idx] = B_img # notice!!!
                     B_img = cv2.cvtColor(B_img, cv2.COLOR_RGB2BGR)
                     cv2.imwrite(B_DIR + classname + '/' + "%08d.png" % tmp_cur_idx, B_img)
                     print("init a B frame, the idx is %d: ", cur_idx)
@@ -199,6 +200,7 @@ def Reconstruct_centroid_res_delta_func(ratio_delta,ratio):
                                 if B_img[j,i,c]>255:
                                     B_img[j,i,c] = 255
                     B_img = B_img.astype("uint8")
+                    frame_mat_SR[tmp_cur_idx] = B_img # notice!!!
                     B_img = cv2.cvtColor(B_img, cv2.COLOR_RGB2BGR)
                     cv2.imwrite(B_DIR + classname + '/' + "%08d.png" % tmp_cur_idx, B_img)
                     print("init a B frame, the idx is %d: ", cur_idx)

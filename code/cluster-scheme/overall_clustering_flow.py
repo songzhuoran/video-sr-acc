@@ -92,6 +92,7 @@ def Reconstruct_cluster_func(ratio):
                                 if B_img[j,i,c]>255:
                                     B_img[j,i,c] = 255
                     B_img = B_img.astype("uint8")
+                    frame_mat_SR[tmp_cur_idx] = B_img # notice!!!
                     B_img = cv2.cvtColor(B_img, cv2.COLOR_RGB2BGR)
                     cv2.imwrite(B_DIR + classname + '/' + "%08d.png" % tmp_cur_idx, B_img)
                     print("init a B frame, the idx is %d: ", cur_idx)
@@ -196,6 +197,7 @@ def Reconstruct_centroid_res_delta_func(ratio_delta,ratio):
                                 if B_img[j,i,c]>255:
                                     B_img[j,i,c] = 255
                     B_img = B_img.astype("uint8")
+                    frame_mat_SR[tmp_cur_idx] = B_img # notice!!!
                     B_img = cv2.cvtColor(B_img, cv2.COLOR_RGB2BGR)
                     cv2.imwrite(B_DIR + classname + '/' + "%08d.png" % tmp_cur_idx, B_img)
                     print("init a B frame, the idx is %d: ", cur_idx)
