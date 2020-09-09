@@ -19,9 +19,9 @@ PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/BIx4/" # GT_LR_pic
 residual_info = [] # a list to store all info, including MV and frequency
 # classname_list = ['calendar','city','foliage','walk']
 # classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
-classname_list = ['000','001','002','003','004'] # need to modify!
+classname_list = ['010','011','012','013','014','015'] # need to modify!
 # classname_list = ['000'] # need to modify!
-classname = '000'
+classname = '005'
 MV_list = []
 res_list = []
 
@@ -112,7 +112,7 @@ def Reconstruct_cluster_func(ratio):
                 for px in range(block_w):
                     for py in range(block_h):
                         if ((curx+px) < sr_frame_w) and ((cury+py) < sr_frame_h):
-                            if ((refx + px) < sr_frame_w) and ((refy+py) < sr_frame_h):
+                            if (0<=(refx + px) < sr_frame_w) and (0<=(refy+py) < sr_frame_h):
                                 B_img[cury+py,curx+px,:] = ref_frame_sr[refy+py,refx + px,:].astype("float") + tmp_res[py,px,:].astype("float")
                             else:
                                 B_img[cury+py,curx+px,:] = tmp_res[py,px,:].astype("float")

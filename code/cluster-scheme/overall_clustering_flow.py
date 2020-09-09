@@ -109,7 +109,7 @@ def Reconstruct_cluster_func(ratio):
                 for px in range(block_w):
                     for py in range(block_h):
                         if ((curx+px) < sr_frame_w) and ((cury+py) < sr_frame_h):
-                            if ((refx + px) < sr_frame_w) and ((refy+py) < sr_frame_h):
+                            if (0<=(refx + px) < sr_frame_w) and (0<=(refy+py) < sr_frame_h):
                                 B_img[cury+py,curx+px,:] = ref_frame_sr[refy+py,refx + px,:].astype("float") + tmp_res[py,px,:].astype("float")
                             else:
                                 B_img[cury+py,curx+px,:] = tmp_res[py,px,:].astype("float")
