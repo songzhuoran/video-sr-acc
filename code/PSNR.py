@@ -118,7 +118,7 @@ def get_PSNR(classname):
 # classes = ['walk'] # need to modify
 # classes = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
 # classes = ['011','012','013','014'] # need to modify!
-classes = ['005','006','007','008','009'] # need to modify!
+classes = ['016','017','018','019','020'] # need to modify!
 for classname in classes:
     get_PSNR(classname)
 # get_PSNR('calendar')
