@@ -1,0 +1,5 @@
+进入四个py文件修改数据集路径，并修改classList变量为待循环的数据集名
+运行main_GT.sh使用GT-SR策略进行remap, 会创建相应文件夹并生成csv和shelve文件
+运行main_mix.sh使用mix策略进行remap, 会创建相应文件夹并生成csv和shelve文件
+
+由于remap耗时较长,建议使用两个screen并行运算两个sh文件

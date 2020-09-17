@@ -1,3 +1,4 @@
+## 针对Vimeo90K数据集；直接对GT-SR的残差进行聚类
 import warnings
 warnings.filterwarnings("ignore")
 import sys

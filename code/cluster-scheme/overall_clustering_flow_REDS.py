@@ -1,3 +1,4 @@
+## 针对REDS数据集；直接对GT-SR的残差进行聚类
 import warnings
 warnings.filterwarnings("ignore")
 import sys
@@ -19,9 +20,9 @@ PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/BIx4/" # GT_LR_pic
 residual_info = [] # a list to store all info, including MV and frequency
 # classname_list = ['calendar','city','foliage','walk']
 # classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
-classname_list = ['016','017','018','019','020'] # need to modify!
+classname_list = ['027','028','029'] # need to modify!
 # classname_list = ['000'] # need to modify!
-classname = '005'
+classname = '027'
 MV_list = []
 res_list = []
 
@@ -243,6 +244,8 @@ def Cluster_res_func(ratio):
     res_list = []
 
     for i in classname_list:
+        MV_list = []
+        res_list = []
         classname = i
         print("classname: ",classname)
         pflist = [] # a list to store the index of P frames

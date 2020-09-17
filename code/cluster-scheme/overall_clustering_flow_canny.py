@@ -1,3 +1,4 @@
+## 针对Vid4数据集；直接对GT-SR的残差进行聚类，聚类时的聚类比例考虑了边缘点的影响
 import warnings
 warnings.filterwarnings("ignore")
 import sys

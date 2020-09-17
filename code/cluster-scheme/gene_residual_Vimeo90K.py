@@ -1,4 +1,5 @@
 ### code for generating 8*8 residual blocks, waiting for clustering
+## 针对Vimeo90K数据集；其数据具有两层文件夹，需单独处理
 import warnings
 warnings.filterwarnings("ignore")
 import sys

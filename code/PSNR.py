@@ -51,12 +51,13 @@ def usageHalt() :
 
 def get_PSNR(classname):
 
-    path1 = "/home/songzhuoran/video/video-sr-acc/REDS/Our_result/bframe_sr_reconstruction/" + classname  # folder of output
+    # path1 = "/home/songzhuoran/video/video-sr-acc/REDS/Our_result/bframe_sr_reconstruction/" + classname  # folder of output
     # path1 = "/home/songzhuoran/video/video-sr-acc/REDS/SR_result/" + classname
+    # path2 = "/home/songzhuoran/video/video-sr-acc/REDS/GT/" + classname  # folder of ground truth
     # path1 = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result/" + classname # folder of EDVR results
     # path1 = "/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr_reconstruction/" + classname # folder of EDVR results
-    path2 = "/home/songzhuoran/video/video-sr-acc/REDS/GT/" + classname  # folder of ground truth
-    # path2 = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" + classname  # folder of ground truth
+    path1 = "/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr_mix/" + classname # folder of EDVR results
+    path2 = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" + classname  # folder of ground truth
 
 
     # path2 = path1
@@ -114,11 +115,12 @@ def get_PSNR(classname):
     print('avg: ', avg)
     return
 #
-# classes = ['calendar', 'city', 'foliage', 'walk']
-# classes = ['walk'] # need to modify
+classes = ['calendar', 'city', 'foliage', 'walk']
+# classes = ['city', 'foliage', 'walk']
+# classes = ['calendar'] # need to modify
 # classes = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
 # classes = ['011','012','013','014'] # need to modify!
-classes = ['016','017','018','019','020'] # need to modify!
+# classes = ['027','028','029'] # need to modify!
 for classname in classes:
     get_PSNR(classname)
 # get_PSNR('calendar')

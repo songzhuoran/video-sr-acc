@@ -8,9 +8,9 @@
 # IMG_DIR=/home/songzhuoran/video/video-sr-acc/REDS/BIx4
 # OUT_DIR=/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4
 
-# for Vimeo90k dataset
-IMG_DIR=/home/songzhuoran/video/video-sr-acc/Vimeo90K/BIx4
-OUT_DIR=/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4
+# for Sintel dataset
+IMG_DIR=/home/songzhuoran/video/video-sr-acc/Sintel/BIx4
+OUT_DIR=/home/songzhuoran/video/video-sr-acc/Sintel/Info_BIx4
 
 video_gen(){
     mkdir -p $OUT_DIR/video
@@ -22,7 +22,7 @@ video_gen(){
     for class_str in $(ls $IMG_DIR); do
         class=${class_str##*/}
         echo ${class}\'s video start producing ...
-        ffmpeg -i $IMG_DIR/$class/%08d.png -vcodec libx265 -x265-params lossless=1 tmp.mp4
+        ffmpeg -i $IMG_DIR/$class/frame_%04d.png -vcodec libx265 -x265-params lossless=1 tmp.mp4
         #./FFmpeg/ffmpeg -pattern_type glob -i '$IMG_DIR/$class/%08d.jpg' -vcodec libx265 -x265-params lossless=1 tmp.mp4
         ffmpeg -i tmp.mp4 -vcodec libx265 -x265-params lossless=1 $OUT_DIR/video/$class.mp4 > $OUT_DIR/mvs/$class.csv
         rm tmp.mp4
