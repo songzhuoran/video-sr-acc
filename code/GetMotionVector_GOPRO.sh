@@ -1,9 +1,13 @@
 ## code for generate MV and index for dataset
 
 
+# # for GOPRO dataset
+# IMG_DIR=/home/songzhuoran/video/video-sr-acc/GOPRO/BIx4
+# OUT_DIR=/home/songzhuoran/video/video-sr-acc/GOPRO/Info_BIx4
+
 # for GOPRO dataset
-IMG_DIR=/home/songzhuoran/video/video-sr-acc/GOPRO/BIx4
-OUT_DIR=/home/songzhuoran/video/video-sr-acc/GOPRO/Info_BIx4
+IMG_DIR=/home/songzhuoran/video/video-sr-acc/GOPRO/GT
+OUT_DIR=/home/songzhuoran/video/video-sr-acc/GOPRO/Info_GT
 
 video_gen(){
     mkdir -p $OUT_DIR/video
@@ -41,6 +45,6 @@ idx_gen(){
 
 
 #################need to modify
-# video_gen
+video_gen
 idx_gen
 

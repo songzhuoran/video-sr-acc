@@ -1,4 +1,3 @@
-## 针对Vid4数据集；直接对GT-SR的残差进行聚类，聚类时的聚类比例考虑了边缘点的影响
 import warnings
 warnings.filterwarnings("ignore")
 import sys
@@ -21,8 +20,8 @@ PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
 GT_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/"
 MVS_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
 residual_info = [] # a list to store all info, including MV and frequency
-classname_list = ['calendar','city','foliage','walk']
-# classname_list = ['city'] # need to modify!!!!
+# classname_list = ['calendar','city','foliage','walk']
+classname_list = ['walk'] # need to modify!!!!
 # MV_list = []
 # res_list = []
 # MV_list_b = []
@@ -332,7 +331,7 @@ def Cluster_res_func(h_ratio,l_ratio):
             cnt_non_zero = 0
             cnt_non_zero = np.sum(canny_output_img[cur_idx,cury:cury+8, curx:curx+8]!=0)
             ratio_non_zero = float(cnt_non_zero)/float(64)
-            if ratio_non_zero >= 0.4: # boundary
+            if ratio_non_zero >= 0.05: # boundary
                 MV_list_b.append(block_MV)
                 res_list_b.append(block_res)
                 over_res_list_b.append(block_res)

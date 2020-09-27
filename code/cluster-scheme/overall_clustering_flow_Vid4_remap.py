@@ -13,13 +13,14 @@ import shelve
 from sklearn.cluster import *
 
 #directory
+# TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vid4_Cluster_remap/GT_SR/"
 TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vid4_Cluster_remap/mix/"
 IDX_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/idx/" # idx directory
-B_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr_mix/" # SR result
+B_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr_reconstruction/" # SR result
 PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
 residual_info = [] # a list to store all info, including MV and frequency
 # classname_list = ['calendar','city', 'foliage', 'walk']
-classname_list = ['city', 'foliage', 'walk']
+classname_list = ['city']
 MV_list = []
 res_list = []
 
@@ -464,9 +465,9 @@ ratio = int(sys.argv[1])
 compression_ratio = 16 # compress weights 16x
 ratio_delta = int(compression_ratio*ratio/(ratio-compression_ratio))
 ### first floor clustering
-Cluster_res_func(ratio)
+# Cluster_res_func(ratio)
 ### second floor clustering
-Cluster_delta_func(ratio_delta,ratio)
+# Cluster_delta_func(ratio_delta,ratio)
 
 
 ### reconstruction

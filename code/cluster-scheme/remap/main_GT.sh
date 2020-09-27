@@ -1,4 +1,4 @@
-mkdir -p remap_result_REDS/
-mkdir -p slice_result_REDS/GT_SR
+mkdir -p remap_result/
+mkdir -p slice_result/GT_SR
 python remap_GT_loop.py
 python slice_GT.py

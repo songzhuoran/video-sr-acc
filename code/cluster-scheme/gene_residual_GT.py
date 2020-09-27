@@ -15,19 +15,17 @@ import shelve
 
 #整帧地进行SR
 
-# #for Vid4 dataset
-# IDX_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/idx/"
-# MVS_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
-# B_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr/" # SR result
-# RES_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/Residuals/"
-# MV_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
-# ORDER_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/order/"
-# PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
-# HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" # GT_HR_pic
-# SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result/"
-# TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vid4_Cluster/"
+#for Vid4 dataset
+IDX_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_GT/idx/"
+MVS_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_GT/mvs/"
+B_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr/" # SR result
+MV_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_GT/mvs/"
+PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
+HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" # GT_HR_pic
+TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vid4_Cluster_GT/"
 # classname_list = ['calendar','city','foliage','walk']
-# classname = 'calendar'
+classname_list = ['calendar']
+classname = 'calendar'
 
 # #for REDS dataset
 # IDX_DIR="/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/idx/"
@@ -43,19 +41,19 @@ import shelve
 # classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
 # classname = '000'
 
-#for Vimeo90k dataset
-IDX_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/idx/"
-MVS_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/mvs/"
-B_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Our_result/bframe_sr/" # SR result
-RES_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/Residuals/"
-MV_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/mvs/"
-ORDER_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/order/"
-PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vimeo90K/BIx4/" # GT_LR_pic
-HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vimeo90K/GT/" # GT_HR_pic
-SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vimeo90K/SR_result/"
-TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vimeo90K_Cluster/"
-classname_list = ['00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050','00051','00052','00053','00054','00055','00056','00057','00058','00059','00060','00061','00062','00063','00064','00065','00066','00067','00068','00069','00070','00071','00072','00073','00074','00075','00076','00077','00078','00079','00080','00081','00082','00083','00084','00085','00086','00087','00088','00089','00090','00091','00092','00093','00094','00095','00096']
-classname = '00001'
+# #for Vimeo90k dataset
+# IDX_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/idx/"
+# MVS_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/mvs/"
+# B_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Our_result/bframe_sr/" # SR result
+# RES_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/Residuals/"
+# MV_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/mvs/"
+# ORDER_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/order/"
+# PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vimeo90K/BIx4/" # GT_LR_pic
+# HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vimeo90K/GT/" # GT_HR_pic
+# SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vimeo90K/SR_result/"
+# TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vimeo90K_Cluster/"
+# classname_list = ['00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050','00051','00052','00053','00054','00055','00056','00057','00058','00059','00060','00061','00062','00063','00064','00065','00066','00067','00068','00069','00070','00071','00072','00073','00074','00075','00076','00077','00078','00079','00080','00081','00082','00083','00084','00085','00086','00087','00088','00089','00090','00091','00092','00093','00094','00095','00096']
+# classname = '00001'
 
 mvsmat = {} # 记录各帧depending关系的dict
 bflist = []  # aka b frame list
@@ -75,7 +73,6 @@ sr_frame_h = 4 * frame_h
 sr_frame_w = 4 * frame_w
 frame_mat_GT_HR = np.zeros((frame_num,sr_frame_h,sr_frame_w, 3), dtype="uint8")#init frame_mat
 frame_mat_GT_LR = np.zeros((frame_num,frame_h,frame_w, 3), dtype="uint8")
-frame_mat_SR_HR = np.zeros((frame_num,sr_frame_h,sr_frame_w, 3), dtype="uint8")
 
 
 def fetch_MV_data():
@@ -102,8 +99,6 @@ def dep_tree_gen():
         frame_mat_GT_HR[i]=cv2.cvtColor(frame_mat_GT_HR[i], cv2.COLOR_BGR2RGB)
         frame_mat_GT_LR[i] = cv2.imread(PICS_DIR + classname + "/%08d.png" % i) # read GT_LR result, bgr formate
         frame_mat_GT_LR[i]=cv2.cvtColor(frame_mat_GT_LR[i], cv2.COLOR_BGR2RGB) # convert to rgb
-        frame_mat_SR_HR[i] = cv2.imread(SR_PICS_DIR + classname + "/%08d.png" % i) # read GT_LR result, bgr formate
-        frame_mat_SR_HR[i]=cv2.cvtColor(frame_mat_SR_HR[i], cv2.COLOR_BGR2RGB) # convert to rgb
     with open(MVS_DIR+classname+".csv","r") as file:
         datainfo = csv.reader(file)
         for row in datainfo:
@@ -118,35 +113,35 @@ def bframe_gen_kernel(fcnt):
         if int(float(row[0])) == fcnt:
             cur_idx, ref_idx, block_w, block_h, curx, cury, refx, refy = np.array(row[0:8]).astype(float).astype(int)
             #generate residual of ground-truth frames
-            gt_residual = np.zeros((4*block_h, 4*block_w, 3))
-            ref_frame_sr = frame_mat_SR_HR[ref_idx]
+            gt_residual = np.zeros((block_h, block_w, 3))
+            ref_frame_sr = frame_mat_GT_HR[ref_idx]
             b_frame_gt = frame_mat_GT_HR[cur_idx]
             for px in range(block_w):
                 for py in range(block_h):
-                    if (curx+px in range(frame_w)) and (cury+py in range(0, frame_h)):
+                    if (curx+px in range(sr_frame_w)) and (cury+py in range(0, sr_frame_h)):
                         # cur块在范围内
-                        sr_curpx = 4 * (curx + px) # sr后图片内各点对应的坐标
-                        sr_curpy = 4 * (cury + py)
-                        sr_refpx = 4 * (refx + px)
-                        sr_refpy = 4 * (refy + py)
-                        b_block_gt = b_frame_gt[sr_curpy:sr_curpy+4, sr_curpx:sr_curpx+4]
-                        if (refx + px in range(0, frame_w)) and (refy+py in range(0, frame_h)):
-                            ref = ref_frame_sr[sr_refpy:sr_refpy+4, sr_refpx:sr_refpx+4, : ]
+                        sr_curpx = curx + px # sr后图片内各点对应的坐标
+                        sr_curpy = cury + py
+                        sr_refpx = refx + px
+                        sr_refpy = refy + py
+                        b_block_gt = b_frame_gt[sr_curpy, sr_curpx, :]
+                        if (sr_refpx in range(0, sr_frame_w)) and (sr_refpy in range(0, sr_frame_h)):
+                            ref = ref_frame_sr[sr_refpy, sr_refpx, : ]
                             #generate neural network input and label, use Ground truth of current frame and reference frame
-                            gt_residual[(py*4):(py*4+4),(px*4):(px*4+4),:] = b_block_gt.astype("float") - ref.astype("float")
+                            gt_residual[py,px,:] = b_block_gt.astype("float") - ref.astype("float")
                         else:
-                            gt_residual[(py*4):(py*4+4),(px*4):(px*4+4),:] = b_block_gt.astype("float")
+                            gt_residual[py,px,:] = b_block_gt.astype("float")
             
             tmp_gt_residual = np.zeros((8, 8, 3))
-            for px in range(int(4*block_w/8)):
-                for py in range(int(4*block_h/8)):
+            for px in range(int(block_w/8)):
+                for py in range(int(block_h/8)):
                     # split the residual into 8*8 blocks
                     tmp_gt_residual = np.array(gt_residual[py*8:py*8+8,px*8:px*8+8,:])  
                     #generate high-resolution mv
-                    tmp_curx = 4*curx + px*8
-                    tmp_cury = 4*cury + py*8
-                    tmp_refx = 4*refx + px*8
-                    tmp_refy = 4*refy + py*8
+                    tmp_curx = curx + px*8
+                    tmp_cury = cury + py*8
+                    tmp_refx = refx + px*8
+                    tmp_refy = refy + py*8
                     #redefine macro-block as each block becomes 8*8
                     tmp_row = np.array(row).astype(int)
                     tmp_row[2] = int(8)
@@ -234,7 +229,6 @@ for i in classname_list:
     sr_frame_w = 4 * frame_w
     frame_mat_GT_HR = np.zeros((frame_num+1,sr_frame_h,sr_frame_w, 3), dtype="uint8") #init frame_mat
     frame_mat_GT_LR = np.zeros((frame_num+1,frame_h,frame_w, 3), dtype="uint8")
-    frame_mat_SR_HR = np.zeros((frame_num+1,sr_frame_h,sr_frame_w, 3), dtype="uint8")
 
     #begin function
     she = shelve.open(TRAIN_DIR+"residual_"+classname+".bat")
