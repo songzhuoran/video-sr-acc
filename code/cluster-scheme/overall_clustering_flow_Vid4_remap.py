@@ -465,9 +465,9 @@ ratio = int(sys.argv[1])
 compression_ratio = 16 # compress weights 16x
 ratio_delta = int(compression_ratio*ratio/(ratio-compression_ratio))
 ### first floor clustering
-# Cluster_res_func(ratio)
+Cluster_res_func(ratio)
 ### second floor clustering
-# Cluster_delta_func(ratio_delta,ratio)
+Cluster_delta_func(ratio_delta,ratio)
 
 
 ### reconstruction

@@ -12,11 +12,17 @@ import threading
 import time
 # warnings.filterwarnings("ignore")
 
-IDX_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/idx/"
-PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/BIx4/"
-GT_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/GT/"
-SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/SR_result/"
-MVS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/mvs/"
+IDX_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/idx/"
+PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/"
+GT_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/"
+SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result/"
+MVS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
+
+# IDX_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/idx/"
+# PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/BIx4/"
+# GT_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/GT/"
+# SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/SR_result/"
+# MVS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/mvs/"
 
 # IDX_DIR = "/home/songzhuoran/video/video-sr-acc/Sintel/Info_BIx4/idx/"
 # PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Sintel/BIx4/"
@@ -24,7 +30,8 @@ MVS_DIR = "/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/mvs/"
 # SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Sintel/SR_result/"
 # MVS_DIR = "/home/songzhuoran/video/video-sr-acc/Sintel/Info_BIx4/mvs/"
 
-SLICES_OUT_DIR = '/home/songzhuoran/video/video-sr-acc/train_info/REDS_Cluster_remap/IP_GT_SR/'
+SLICES_OUT_DIR = '/home/songzhuoran/video/video-sr-acc/train_info/Vid4_Cluster_remap/IP_GT_GT/'
+# SLICES_OUT_DIR = '/home/songzhuoran/video/video-sr-acc/train_info/REDS_Cluster_remap/IP_GT_GT/'
 
 
 def fetch_mv_data():
@@ -114,7 +121,7 @@ def remapSliceKernel(fidx, mvs_data, bflist, dic):
         # print(refs)
         for ref in refs:  # 在所有相关帧里重新搜索最匹配的块
             # refFrame = cv2.imread(SR_PICS_DIR+classname+"/frame_%04d.png" % (ref+1)) # add by songzhuoran, sintel dataset
-            refFrame = cv2.imread(SR_PICS_DIR+classname+"/%08d.png" % ref) # add by songzhuoran
+            refFrame = cv2.imread(GT_PICS_DIR+classname+"/%08d.png" % ref) # add by songzhuoran
             refFrame=cv2.cvtColor(refFrame, cv2.COLOR_BGR2RGB) # add by songzhuoran
             refFrame = refFrame.astype('float') # add by songzhuoran
             sRange = 20
@@ -179,10 +186,10 @@ def remapSliceKernel(fidx, mvs_data, bflist, dic):
     dic[fidx] = sliceList
     print('finish: ', fidx)
 
-# classnameList = ['calendar', 'city', 'foliage', 'walk']
+classnameList = ['calendar', 'city', 'foliage', 'walk']
 # classnameList = ['city']
 # classnameList = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
-classnameList = ['016','017','018','019','020','021','022','023','024','025','026','027','028','029']
+# classnameList = ['016','017','018','019','020','021','022','023','024','025','026','027','028','029']
 # classnameList = ['ambush_1', 'market_4', 'temple_1', 'mountain_2', 'bamboo_3', 'wall', 'market_1', 'PERTURBED_market_3', 'cave_3', 'PERTURBED_shaman_1', 'ambush_3', 'tiger']
 
 # iterate all videos

@@ -14,19 +14,19 @@ import shelve
 
 #整帧地进行SR
 
-# #for Vid4 dataset
-# IDX_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/idx/"
-# MVS_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
-# B_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr/" # SR result
-# RES_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/Residuals/"
-# MV_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
-# ORDER_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/order/"
-# PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
-# HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" # GT_HR_pic
-# SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result/"
-# TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vid4_Cluster/"
-# classname_list = ['calendar','city','foliage','walk']
-# classname = 'calendar'
+#for Vid4 dataset
+IDX_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/idx/"
+MVS_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
+B_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr/" # SR result
+RES_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/Residuals/"
+MV_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/mvs/"
+ORDER_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/order/"
+PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
+HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/GT/" # GT_HR_pic
+SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/SR_result/"
+TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vid4_Cluster/"
+classname_list = ['calendar','city','foliage','walk']
+classname = 'calendar'
 
 # #for REDS dataset
 # IDX_DIR="/home/songzhuoran/video/video-sr-acc/REDS/Info_BIx4/idx/"
@@ -42,19 +42,19 @@ import shelve
 # classname_list = ['000','001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029']
 # classname = '000'
 
-#for Vimeo90k dataset
-IDX_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/idx/"
-MVS_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/mvs/"
-B_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Our_result/bframe_sr/" # SR result
-RES_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/Residuals/"
-MV_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/mvs/"
-ORDER_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/order/"
-PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vimeo90K/BIx4/" # GT_LR_pic
-HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vimeo90K/GT/" # GT_HR_pic
-SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vimeo90K/SR_result/"
-TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vimeo90K_Cluster/"
-classname_list = ['00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050','00051','00052','00053','00054','00055','00056','00057','00058','00059','00060','00061','00062','00063','00064','00065','00066','00067','00068','00069','00070','00071','00072','00073','00074','00075','00076','00077','00078','00079','00080','00081','00082','00083','00084','00085','00086','00087','00088','00089','00090','00091','00092','00093','00094','00095','00096']
-classname = '00001'
+# #for Vimeo90k dataset
+# IDX_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/idx/"
+# MVS_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/mvs/"
+# B_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Our_result/bframe_sr/" # SR result
+# RES_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/Residuals/"
+# MV_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/mvs/"
+# ORDER_DIR="/home/songzhuoran/video/video-sr-acc/Vimeo90K/Info_BIx4/order/"
+# PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vimeo90K/BIx4/" # GT_LR_pic
+# HR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vimeo90K/GT/" # GT_HR_pic
+# SR_PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vimeo90K/SR_result/"
+# TRAIN_DIR = "/home/songzhuoran/video/video-sr-acc/train_info/Vimeo90K_Cluster/"
+# classname_list = ['00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050','00051','00052','00053','00054','00055','00056','00057','00058','00059','00060','00061','00062','00063','00064','00065','00066','00067','00068','00069','00070','00071','00072','00073','00074','00075','00076','00077','00078','00079','00080','00081','00082','00083','00084','00085','00086','00087','00088','00089','00090','00091','00092','00093','00094','00095','00096']
+# classname = '00001'
 
 mvsmat = {} # 记录各帧depending关系的dict
 bflist = []  # aka b frame list
