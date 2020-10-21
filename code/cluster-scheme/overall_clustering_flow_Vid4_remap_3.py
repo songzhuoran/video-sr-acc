@@ -383,15 +383,16 @@ def Cluster_delta_func_3(ratio_delta,ratio):
             delta_res_arr = np.array(overall_delta_res_list[label_cnt])
             print(delta_res_arr.shape)
             if ratio_delta !=0:
-                # ms = KMeans(n_clusters=int(delta_res_arr.shape[0]/ratio_delta),verbose=1,algorithm='full',n_init = 2)
-                ms = KMeans(n_clusters=int(delta_res_arr.shape[0]/ratio_delta),verbose = 1,n_init = 2)
-                delta_cluster_label = ms.fit_predict(delta_res_arr)
+                if int(delta_res_arr.shape[0]/ratio_delta) != 0:
+                    # ms = KMeans(n_clusters=int(delta_res_arr.shape[0]/ratio_delta),verbose=1,algorithm='full',n_init = 2)
+                    ms = KMeans(n_clusters=int(delta_res_arr.shape[0]/ratio_delta),verbose = 1,n_init = 2)
+                    delta_cluster_label = ms.fit_predict(delta_res_arr)
 
-                clustered_delta_res_list = []
-                clustered_delta_res_list = list(ms.cluster_centers_.astype("float"))                     
+                    clustered_delta_res_list = []
+                    clustered_delta_res_list = list(ms.cluster_centers_.astype("float"))                     
 
-                overall_delta_label_list.append(delta_cluster_label)
-                overall_centroid_delta_res_list.append(clustered_delta_res_list)
+                    overall_delta_label_list.append(delta_cluster_label)
+                    overall_centroid_delta_res_list.append(clustered_delta_res_list)
             
             else: # used for test whether the code flow is correct
                 delta_cluster_label = np.zeros((delta_res_arr.shape[0]))
@@ -421,7 +422,7 @@ def Cluster_delta_func_3(ratio_delta,ratio):
 #begin func
 ratio = int(sys.argv[1])
 ratio_2 = int(sys.argv[2])
-compression_ratio = 16 # compress weights 16x
+compression_ratio = 32 # compress weights 16x
 ratio_3 = int(1/((1/compression_ratio)-(1/ratio+1/ratio_2)))
 print(ratio_3)
 # ### first floor clustering

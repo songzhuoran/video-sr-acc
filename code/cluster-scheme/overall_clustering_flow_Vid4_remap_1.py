@@ -19,8 +19,8 @@ IDX_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/Info_BIx4/idx/" # idx direc
 B_DIR="/home/songzhuoran/video/video-sr-acc/Vid4/Our_result/bframe_sr_reconstruction/" # SR result
 PICS_DIR = "/home/songzhuoran/video/video-sr-acc/Vid4/BIx4/" # GT_LR_pic
 residual_info = [] # a list to store all info, including MV and frequency
-# classname_list = ['calendar','city', 'foliage', 'walk']
-classname_list = ['city', 'foliage', 'walk']
+classname_list = ['calendar','city', 'foliage', 'walk']
+# classname_list = ['city', 'foliage', 'walk']
 MV_list = []
 res_list = []
 
@@ -391,7 +391,7 @@ def Cluster_delta_func_3(ratio_delta,ratio):
 
 
 #begin func
-compression_ratio = 16 # compress weights 16x
+compression_ratio = 32 # compress weights 16x
 # ### first floor clustering
 Cluster_res_func(compression_ratio)
 
